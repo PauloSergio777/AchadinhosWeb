@@ -1,0 +1,42 @@
+[
+  {
+    "id": "p1",
+    "title": "Smartphone",
+    "price": 2000.0,
+    "image": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=0b5f9c8b2a3f9a3d6b9c0a7c9f8b2c1d",
+    "category": "Eletrônicos",
+    "affiliateUrl": "https://example.com/aff/smartphone"
+  },
+  {
+    "id": "p2",
+    "title": "Camiseta Básica",
+    "price": 49.99,
+    "image": "https://images.unsplash.com/photo-1520975919709-3f3b5f5b7f2a?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=6d4e6a3b1a9a8b7c6d5e4f3a2b1c0d9e",
+    "category": "Moda",
+    "affiliateUrl": "https://example.com/aff/camiseta"
+  },
+  {
+    "id": "p3",
+    "title": "Controle de videogame",
+    "price": 240.0,
+    "image": "https://images.unsplash.com/photo-1585386959984-a4155226b6b3?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=2a6b8c9d0e1f2a3b4c5d6e7f8g9h0i1",
+    "category": "Jogos",
+    "affiliateUrl": "https://example.com/aff/controle"
+  },
+  {
+    "id": "p4",
+    "title": "Fone de ouvido",
+    "price": 199.0,
+    "image": "https://images.unsplash.com/photo-1518444021311-4f7b8f6d9a1b?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=abcdef1234567890abcdef1234567890",
+    "category": "Eletrônicos",
+    "affiliateUrl": "https://example.com/aff/fone"
+  },
+  {
+    "id": "p5",
+    "title": "Tênis esportivo",
+    "price": 299.9,
+    "image": "https://images.unsplash.com/photo-1528701800483-20a9d3b62a4d?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=123456abcdef7890abcdef1234567890",
+    "category": "Moda",
+    "affiliateUrl": "https://example.com/aff/tenis"
+  }
+]
