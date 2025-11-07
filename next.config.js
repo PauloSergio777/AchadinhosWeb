@@ -1,13 +1,12 @@
-/** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: [
-      'm.media-amazon.com',
-      'img.submarino.com.br',
-      'static.netshoes.com.br',
-      'cdn.lojasrenner.com.br',
-      'a-static.mlcdn.com.br',
-      'images-americanas.b2w.io'
+    remotePatterns: [
+      { protocol: 'https', hostname: 'm.media-amazon.com' },
+      { protocol: 'https', hostname: 'img.submarino.com.br' },
+      { protocol: 'https', hostname: 'static.netshoes.com.br' },
+      { protocol: 'https', hostname: 'cdn.lojasrenner.com.br' },
+      { protocol: 'https', hostname: 'a-static.mlcdn.com.br' },
+      { protocol: 'https', hostname: 'images-americanas.b2w.io' }
     ],
   },
 }
