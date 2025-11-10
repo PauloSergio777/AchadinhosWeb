@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Papa from "papaparse"; // ← Novo import
 
 export default function Home() {
   const [produtos, setProdutos] = useState([]);
@@ -13,20 +14,17 @@ export default function Home() {
         const response = await fetch(
           "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ1UCajn2wrJEid6fBVYehjW6p3tJX3WAUgB9UuymsvoB89d05HzHsVszqQUG8HyDtoHRs7WZCjT92L/pub?gid=0&single=true&output=csv"
         );
-        const texto = await response.text();
-        const linhas = texto.trim().split("\n");
-        const cabecalhos = linhas[0].split(",");
 
-        const dados = linhas.slice(1).map((linha) => {
-          const valores = linha.split(",");
-          const item = {};
-          cabecalhos.forEach((coluna, i) => {
-            item[coluna.trim()] = valores[i]?.trim();
-          });
-          return item;
+        const texto = await response.text();
+
+        // 🧠 Usa PapaParse para interpretar CSV corretamente (com vírgulas, aspas etc.)
+        const resultado = Papa.parse(texto, {
+          header: true,
+          skipEmptyLines: true,
         });
 
-        setProdutos(dados);
+        console.log("📦 Produtos carregados:", resultado.data);
+        setProdutos(resultado.data);
       } catch (erro) {
         console.error("Erro ao carregar produtos:", erro);
       } finally {
@@ -37,7 +35,7 @@ export default function Home() {
     carregarProdutos();
   }, []);
 
-  // Filtrar produtos pela busca
+  // 🔍 Filtrar produtos pela busca
   const produtosFiltrados = produtos.filter((p) =>
     p.nome?.toLowerCase().includes(busca.toLowerCase())
   );
