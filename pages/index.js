@@ -57,32 +57,38 @@ export default function Home() {
     carregarProdutos();
   }, []);
 
-  // 🔍 Filtra produtos conforme a busca
   const produtosFiltrados = produtos.filter((produto) =>
     produto.nome?.toLowerCase().includes(busca.toLowerCase())
   );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 text-gray-900 flex flex-col">
-      {/* Cabeçalho fixo minimalista */}
-      <header className="bg-white/80 backdrop-blur-md shadow-md sticky top-0 z-10 border-b border-gray-200">
+      {/* 🧭 Cabeçalho fixo e minimalista */}
+      <header className="bg-white/70 backdrop-blur-lg sticky top-0 z-20 shadow-sm border-b border-gray-200">
         <div className="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-3">
           <h1 className="text-2xl font-bold tracking-tight text-blue-600">
             🛍️ Achadinhos Web
           </h1>
-          <input
-            type="text"
-            placeholder="Buscar produtos..."
-            value={busca}
-            onChange={(e) => setBusca(e.target.value)}
-            className="w-full sm:w-64 px-4 py-2 rounded-xl border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition"
-          />
+
+          {/* 🔍 Campo de busca com animação */}
+          <div className="relative w-full sm:w-auto flex-1 sm:flex-initial">
+            <input
+              type="text"
+              placeholder="Buscar produtos..."
+              value={busca}
+              onChange={(e) => setBusca(e.target.value)}
+              className="w-full sm:w-72 px-4 py-2 rounded-xl border border-gray-300 bg-gray-50 
+              focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white 
+              transition-all duration-300 placeholder:text-gray-400"
+            />
+            <span className="absolute right-3 top-2.5 text-gray-400">🔎</span>
+          </div>
         </div>
       </header>
 
-      {/* Conteúdo principal */}
+      {/* 🧱 Conteúdo principal */}
       <main className="flex-1 max-w-6xl mx-auto p-6 w-full">
-        <h2 className="text-xl font-semibold mb-6 text-gray-800">
+        <h2 className="text-lg font-semibold mb-6 text-gray-800">
           Produtos em destaque
         </h2>
 
@@ -99,13 +105,15 @@ export default function Home() {
             {produtosFiltrados.map((produto, index) => (
               <div
                 key={index}
-                className="bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-lg transition-transform hover:-translate-y-1 duration-200 flex flex-col"
+                className="bg-white border border-gray-100 rounded-2xl shadow-sm 
+                hover:shadow-lg hover:-translate-y-1 transition-transform duration-300 
+                flex flex-col overflow-hidden"
               >
                 {produto.imagem && (
                   <img
                     src={produto.imagem}
                     alt={produto.nome}
-                    className="w-full h-48 object-cover rounded-t-2xl"
+                    className="w-full h-48 object-cover rounded-t-2xl transition-all duration-500 hover:scale-105"
                     onError={(e) => (e.target.style.display = "none")}
                   />
                 )}
@@ -122,7 +130,8 @@ export default function Home() {
                         href={produto.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-block text-center w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-xl transition"
+                        className="inline-block text-center w-full bg-blue-600 
+                        hover:bg-blue-700 text-white py-2 rounded-xl transition-all duration-300"
                       >
                         Ver produto
                       </a>
@@ -135,8 +144,8 @@ export default function Home() {
         )}
       </main>
 
-      {/* Rodapé minimalista */}
-      <footer className="bg-white border-t border-gray-200 text-center py-4 text-sm text-gray-600">
+      {/* ⚓ Rodapé clean */}
+      <footer className="bg-white border-t border-gray-200 text-center py-4 text-sm text-gray-600 mt-10">
         © {new Date().getFullYear()} Achadinhos Web — Todos os direitos
         reservados.
       </footer>
