@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import Papa from "papaparse";
 
 export default function Home() {
   const [produtos, setProdutos] = useState([]);
@@ -12,23 +13,22 @@ export default function Home() {
         const response = await fetch(
           "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ1UCajn2wrJEid6fBVYehjW6p3tJX3WAUgB9UuymsvoB89d05HzHsVszqQUG8HyDtoHRs7WZCjT92L/pub?output=csv"
         );
-        const data = await response.text();
+        const csvText = await response.text();
 
-        const linhas = data.split("\n").slice(1);
-        const produtosFormatados = linhas
-          .map((linha) => {
-            const colunas = linha.split(",");
-            return {
-              id: colunas[0],
-              nome: colunas[1],
-              preco: colunas[2],
-              imagem: colunas[3],
-              link: colunas[4]?.trim(),
-            };
-          })
-          .filter((p) => p.nome && p.link);
-
-        setProdutos(produtosFormatados);
+        Papa.parse(csvText, {
+          header: true,
+          skipEmptyLines: true,
+          complete: (results) => {
+            const dados = results.data.map((item) => ({
+              id: item.id,
+              nome: item.nome?.trim(),
+              preco: item.preco?.trim(),
+              imagem: item.imagem?.trim(),
+              link: item.link?.trim(),
+            }));
+            setProdutos(dados);
+          },
+        });
       } catch (error) {
         console.error("Erro ao buscar planilha:", error);
       } finally {
@@ -40,7 +40,7 @@ export default function Home() {
   }, []);
 
   const produtosFiltrados = produtos.filter((p) =>
-    p.nome.toLowerCase().includes(busca.toLowerCase())
+    p.nome?.toLowerCase().includes(busca.toLowerCase())
   );
 
   return (
@@ -52,6 +52,7 @@ export default function Home() {
         Os melhores achados da internet para você!
       </p>
 
+      {/* Campo de busca */}
       <input
         type="text"
         placeholder="🔎 Buscar produto..."
@@ -60,9 +61,11 @@ export default function Home() {
         onChange={(e) => setBusca(e.target.value)}
       />
 
+      {/* Cards de produtos */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 w-full max-w-6xl">
         {carregando
-          ? [...Array(6)].map((_, i) => (
+          ? // Skeleton loader
+            [...Array(6)].map((_, i) => (
               <div
                 key={i}
                 className="animate-pulse bg-[#111c2a] rounded-2xl shadow-lg p-4"
@@ -81,7 +84,8 @@ export default function Home() {
                 <img
                   src={produto.imagem}
                   alt={produto.nome}
-                  className="w-full h-48 object-cover bg-gray-900"
+                  loading="lazy"
+                  className="w-full h-48 object-cover bg-gray-900 transition-opacity duration-300"
                   onError={(e) =>
                     (e.target.src =
                       "https://via.placeholder.com/400x300?text=Imagem+Indisponível")
@@ -105,10 +109,12 @@ export default function Home() {
             ))}
       </div>
 
+      {/* Rodapé */}
       <footer className="mt-16 text-gray-500 text-sm border-t border-gray-800 pt-4 w-full text-center">
-        © 2025 Achadinhos Web — Todos os direitos reservados.
+        © 2025 Achadinhos da Web — Todos os direitos reservados.
       </footer>
 
+      {/* Animação shimmer */}
       <style jsx global>{`
         .shimmer {
           position: relative;
