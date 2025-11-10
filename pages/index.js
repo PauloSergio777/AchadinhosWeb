@@ -8,8 +8,9 @@ export default function Home() {
   useEffect(() => {
     const carregarCSV = async () => {
       try {
-        const response = await fetch("/produtos.csv");
-        const texto = await response.text();
+const response = await fetch(
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ1UCajn2wrJEid6fBVYehjW6p3tJX3WAUgB9UuymsvoB89d05HzHsVszqQUG8HyDtoHRs7WZCjT92L/pub?gid=0&single=true&output=csv"
+);        const texto = await response.text();
 
         const linhas = texto.split("\n").slice(1);
         const produtosProcessados = linhas
