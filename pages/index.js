@@ -15,7 +15,7 @@ export default function Home() {
         );
         const texto = await response.text();
 
-        // ✅ Tratamento de CSV com aspas e vírgulas
+        // ✅ Parser CSV robusto (mantém vírgulas dentro de aspas)
         const linhas = texto
           .trim()
           .split("\n")
@@ -25,9 +25,8 @@ export default function Home() {
             let dentroDeAspas = false;
 
             for (let char of linha) {
-              if (char === '"') {
-                dentroDeAspas = !dentroDeAspas;
-              } else if (char === "," && !dentroDeAspas) {
+              if (char === '"') dentroDeAspas = !dentroDeAspas;
+              else if (char === "," && !dentroDeAspas) {
                 partes.push(atual);
                 atual = "";
               } else {
@@ -58,71 +57,88 @@ export default function Home() {
     carregarProdutos();
   }, []);
 
-  // 🔍 Filtragem de produtos
+  // 🔍 Filtra produtos conforme a busca
   const produtosFiltrados = produtos.filter((produto) =>
     produto.nome?.toLowerCase().includes(busca.toLowerCase())
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900">
-      {/* Cabeçalho */}
-      <header className="bg-blue-600 text-white py-4 shadow-lg sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto px-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold tracking-wide">🛍️ Achadinhos Web</h1>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 text-gray-900 flex flex-col">
+      {/* Cabeçalho fixo minimalista */}
+      <header className="bg-white/80 backdrop-blur-md shadow-md sticky top-0 z-10 border-b border-gray-200">
+        <div className="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-3">
+          <h1 className="text-2xl font-bold tracking-tight text-blue-600">
+            🛍️ Achadinhos Web
+          </h1>
           <input
             type="text"
-            placeholder="Buscar produto..."
+            placeholder="Buscar produtos..."
             value={busca}
             onChange={(e) => setBusca(e.target.value)}
-            className="px-3 py-2 rounded-lg text-gray-900 w-48 sm:w-64 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full sm:w-64 px-4 py-2 rounded-xl border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition"
           />
         </div>
       </header>
 
-      {/* Conteúdo */}
-      <main className="max-w-6xl mx-auto p-6">
-        <h2 className="text-xl font-semibold mb-4">Produtos em destaque</h2>
+      {/* Conteúdo principal */}
+      <main className="flex-1 max-w-6xl mx-auto p-6 w-full">
+        <h2 className="text-xl font-semibold mb-6 text-gray-800">
+          Produtos em destaque
+        </h2>
 
         {carregando ? (
-          <p className="text-center mt-10">Carregando produtos...</p>
+          <p className="text-center mt-20 text-gray-500 animate-pulse">
+            Carregando produtos...
+          </p>
         ) : produtosFiltrados.length === 0 ? (
-          <p className="text-center mt-10">Nenhum produto encontrado.</p>
+          <p className="text-center mt-20 text-gray-500">
+            Nenhum produto encontrado 😕
+          </p>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {produtosFiltrados.map((produto, index) => (
               <div
                 key={index}
-                className="border rounded-2xl shadow-md p-4 hover:shadow-xl transition bg-white"
+                className="bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-lg transition-transform hover:-translate-y-1 duration-200 flex flex-col"
               >
                 {produto.imagem && (
                   <img
                     src={produto.imagem}
                     alt={produto.nome}
-                    className="w-full h-48 object-cover rounded-xl"
-                    onError={(e) => (e.target.style.display = "none")} // Evita quebra se imagem der erro
+                    className="w-full h-48 object-cover rounded-t-2xl"
+                    onError={(e) => (e.target.style.display = "none")}
                   />
                 )}
-                <h2 className="text-lg font-semibold mt-3">{produto.nome}</h2>
-                <p className="text-gray-700">{produto.preco}</p>
-                {produto.link && (
-                  <a
-                    href={produto.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-2 inline-block bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition"
-                  >
-                    Ver produto
-                  </a>
-                )}
+                <div className="p-4 flex flex-col flex-1">
+                  <h3 className="text-lg font-semibold mb-1 text-gray-800">
+                    {produto.nome}
+                  </h3>
+                  <p className="text-blue-600 font-medium mb-3">
+                    {produto.preco}
+                  </p>
+                  <div className="mt-auto">
+                    {produto.link && (
+                      <a
+                        href={produto.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-block text-center w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-xl transition"
+                      >
+                        Ver produto
+                      </a>
+                    )}
+                  </div>
+                </div>
               </div>
             ))}
           </div>
         )}
       </main>
 
-      {/* Rodapé */}
-      <footer className="bg-gray-100 text-center py-4 mt-10 text-sm text-gray-600">
-        © {new Date().getFullYear()} Achadinhos Web — Todos os direitos reservados.
+      {/* Rodapé minimalista */}
+      <footer className="bg-white border-t border-gray-200 text-center py-4 text-sm text-gray-600">
+        © {new Date().getFullYear()} Achadinhos Web — Todos os direitos
+        reservados.
       </footer>
     </div>
   );
